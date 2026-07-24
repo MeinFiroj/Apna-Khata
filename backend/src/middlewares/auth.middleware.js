@@ -11,5 +11,6 @@ export const authMiddleware = async (req, res, next) => {
         next()
     } catch (error) {
         res.status(500).json({ message: "Server error!" })
+        console.log(error)
     }
 }
