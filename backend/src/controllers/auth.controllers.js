@@ -16,9 +16,11 @@ export const adminRegCtrl = async (req, res) => {
         const passHash = await bcrypt.hash(password, 10);
         const admin = await adminModel.create({ email, password: passHash })
 
-        const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET_TOKEN, { expiresIn: "7d" })
+        const token = jwt.sign({ id: admin._id, role: admin.role }, process.env.JWT_SECRET_TOKEN, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
@@ -40,9 +42,11 @@ export const adminLoginCtrl = async (req, res) => {
 
         if (!checkPass) return res.status(409).json({ message: "Incorrect password!" })
 
-        const token = jwt.sign({ id: existingAdmin._id }, process.env.JWT_SECRET_TOKEN, { expiresIn: "7d" })
+        const token = jwt.sign({ id: existingAdmin._id, role: existingAdmin.role }, process.env.JWT_SECRET_TOKEN, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
@@ -52,3 +56,17 @@ export const adminLoginCtrl = async (req, res) => {
         res.status(500).json({ message: "Server error!" })
     }
 }
+
+export const adminMeCtrl = async (req, res) => {
+    const { token } = req.cookies;
+    if (!token) return res.status(401).json({ message: "Unauthorized, Token not found" })
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN)
+        const admin = await adminModel.findOne({ _id: decoded.id })
+        res.status(200).json({ message: "Admin Data fetched Successfully!", data: { email: admin.email, id: admin._id } })
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ message: "Invalid or expired token" })
+    }
+}
+

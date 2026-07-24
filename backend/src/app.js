@@ -3,6 +3,7 @@ import cors from 'cors'
 import authRouter from './routes/auth.routes.js';
 import adminRouter from './routes/admin.routes.js';
 import userRouter from './routes/user.routes.js';
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.use(cors({
     origin : "http://localhost:5173",
     credentials : true
 }))
+app.use(cookieParser())
 
 
 // Routes
