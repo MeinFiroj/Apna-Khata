@@ -16,7 +16,7 @@ export const adminRegCtrl = async (req, res) => {
         const passHash = await bcrypt.hash(password, 10);
         const admin = await adminModel.create({ email, password: passHash })
 
-        const token = jwt.sign({ id: admin._id, role: admin.role }, process.env.JWT_SECRET_TOKEN, { expiresIn: "7d" })
+        const token = jwt.sign({ id: admin._id, role: admin.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -42,7 +42,7 @@ export const adminLoginCtrl = async (req, res) => {
 
         if (!checkPass) return res.status(409).json({ message: "Incorrect password!" })
 
-        const token = jwt.sign({ id: existingAdmin._id, role: existingAdmin.role }, process.env.JWT_SECRET_TOKEN, { expiresIn: "7d" })
+        const token = jwt.sign({ id: existingAdmin._id, role: existingAdmin.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",

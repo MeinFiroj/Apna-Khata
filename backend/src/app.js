@@ -1,6 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import authRouter from './routes/auth.routes.js';
 import adminRouter from './routes/admin.routes.js';
 import userRouter from './routes/user.routes.js';
 import cookieParser from 'cookie-parser'
@@ -17,7 +16,6 @@ app.use(cookieParser())
 
 
 // Routes
-app.use('/api/auth', authRouter)
 app.use('/api/admin', adminRouter)
 app.use('/api/user', userRouter)
 

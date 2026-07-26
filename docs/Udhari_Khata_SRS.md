@@ -38,8 +38,8 @@ MVP scope: single shop, single owner. Multi-shop support, online payment collect
 ### 4.1 Authentication
 | ID | Requirement |
 |---|---|
-| FR-1.1 | Owner logs in with admin username/password |
-| FR-1.2 | Customer signs up/logs in with phone number + OTP |
+| FR-1.1 | Owner logs in with admin email/password + otp (for extra safefy) |
+| FR-1.2 | Customer signs up/logs in with email/password |
 | FR-1.3 | System issues a session token (JWT) on successful login |
 | FR-1.4 | Owner-only and customer-only routes are access-restricted by role |
 
