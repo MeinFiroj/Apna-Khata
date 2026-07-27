@@ -40,7 +40,7 @@ export const adminLoginCtrl = async (req, res) => {
     try {
         const checkPass = await bcrypt.compare(password, existingAdmin.password)
 
-        if (!checkPass) return res.status(409).json({ message: "Incorrect password!" })
+        if (!checkPass) return res.status(401).json({ message: "Incorrect password!" })
 
         const token = jwt.sign({ id: existingAdmin._id, role: existingAdmin.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {

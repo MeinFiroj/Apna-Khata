@@ -1,6 +1,6 @@
 import express from 'express'
 import { authMiddleware } from '../middlewares/auth.middleware.js';
-import { adminLoginCtrl, adminMeCtrl, adminRegCtrl } from '../controllers/auth.controllers.js';
+import { adminLoginCtrl, adminMeCtrl, adminRegCtrl } from '../controllers/adminAuth.controllers.js';
 
 const adminRouter = express.Router();
 
