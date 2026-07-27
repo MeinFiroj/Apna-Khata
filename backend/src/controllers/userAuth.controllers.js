@@ -76,3 +76,17 @@ export const userLogCtrl = async (req, res) => {
         res.status(500).json({ message: "Something went wrong!" })
     }
 }
+
+export const userMeCtrl = async (req, res) => {
+    const { token } = req.cookies;
+    if (!token) return res.status(401).json({ message: "Unauthorized, Token not found" })
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+        const user = await userModel.findOne({ _id: decoded.id })
+        res.status(200).json({ message: "User Data fetched Successfully!", data: { email: user.email, id: user._id } })
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ message: "Invalid or expired token" })
+    }
+}

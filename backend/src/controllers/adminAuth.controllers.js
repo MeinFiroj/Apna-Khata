@@ -61,7 +61,7 @@ export const adminMeCtrl = async (req, res) => {
     const { token } = req.cookies;
     if (!token) return res.status(401).json({ message: "Unauthorized, Token not found" })
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_TOKEN)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
         const admin = await adminModel.findOne({ _id: decoded.id })
         res.status(200).json({ message: "Admin Data fetched Successfully!", data: { email: admin.email, id: admin._id } })
     } catch (error) {
