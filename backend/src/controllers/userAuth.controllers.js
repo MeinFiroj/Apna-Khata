@@ -2,6 +2,7 @@ import validator from 'validator';
 import { userModel } from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { sendLoginAlertEmail } from '../services/email.service.js';
 
 
 export const userEmailCheck = async (req, res) => {
@@ -69,6 +70,8 @@ export const userLogCtrl = async (req, res) => {
             sameSite: "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
+
+        await sendLoginAlertEmail(email, userExistance.name)
 
         res.status(200).json({ message: "User logged in successfully!", data: { name: userExistance.name, email: userExistance.email, number: userExistance.number, id: userExistance._id } })
     } catch (error) {
