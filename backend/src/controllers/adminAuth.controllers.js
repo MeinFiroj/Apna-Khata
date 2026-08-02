@@ -93,7 +93,7 @@ export const createUserCtrl = async (req, res) => {
     }
 }
 
-export const deactivateUser = async (req, res) => {
+export const deActivateUser = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -102,6 +102,21 @@ export const deactivateUser = async (req, res) => {
         if (!user) return res.status(404).json({ message: "User not found" })
 
         res.status(200).json({ message: "Account deactivated!" })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong, try again later." })
+    }
+}
+
+export const reActivateUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await userModel.findByIdAndUpdate(id, { isActive: true }, { new: true })
+
+        if (!user) return res.status(404).json({ message: "User not found" })
+
+        res.status(200).json({ message: "Account activated!" })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong, try again later." })
