@@ -72,6 +72,7 @@ export const adminMeCtrl = async (req, res) => {
 }
 
 
+// User account management
 export const createUserCtrl = async (req, res) => {
     const { name, email, password, number } = req.body;
 
@@ -89,5 +90,20 @@ export const createUserCtrl = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })
+    }
+}
+
+export const deactivateUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await userModel.findByIdAndUpdate(id, { isActive: false }, { new: true })
+
+        if (!user) return res.status(404).json({ message: "User not found" })
+
+        res.status(200).json({ message: "Account deactivated!" })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong, try again later." })
     }
 }

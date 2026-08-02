@@ -10,6 +10,4 @@ userRouter.get('/me', userMeCtrl)
 
 
 
-
-
 export default userRouter;

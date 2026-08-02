@@ -16,19 +16,26 @@ export const authMiddleware = async (req, res, next) => {
     }
 }
 
-export const isAdmin = async (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     const { token } = req.cookies;
     if (!token) return res.status(401).json({ message: "Unauthorized! Token not found" })
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (decoded.role !== 'admin') return res.status(401).json({ message: "Unauthorized! This action can't be proceed" })
-        next()
+        req.user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        next();
     } catch (error) {
         return res.status(401).json({ message: "Invalid or expired token!" })
     }
 }
 
+export const isAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin') return res.status(403).json({ message: "Admin access only" })
+    next();
+}
 
+export const isUser = (req, res, next) => {
+    if (req.user.role !== 'user') return res.status(403).json({ message: "User access only" })
+    next();
+}
 
 

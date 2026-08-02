@@ -60,6 +60,8 @@ export const userLogCtrl = async (req, res) => {
         const userExistance = await userModel.findOne({ email })
         if (!userExistance) return res.status(400).json({ message: "User doesn't exist!" })
 
+        if (!userExistance.isActive) return res.status(403).json({ message: "Account deactivated. Please contact the shop owner." })
+
         const checkPass = await bcrypt.compare(password, userExistance.password);
         if (!checkPass) return res.status(401).json({ message: "Incorrect password" })
 
