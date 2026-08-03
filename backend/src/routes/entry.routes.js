@@ -4,11 +4,21 @@ import { entryModel } from '../models/entry.model.js';
 import { userModel } from '../models/user.model.js';
 
 
+
 const entryRouter = express.Router()
 
+// Entries management
+// - post /entries/:customerId
+// - get /entries
+// - get /entries/:cu
+// - get /entries/pending
+// - PATCH /entries/:id/verify
+// - PATCH /entries/:id/reject
+// - GET /dashboard
 
-entryRouter.post('/', verifyToken, isAdmin, async (req, res) => {
-    const { type, amount, note, customerId } = req.body;
+entryRouter.post('/:customerId', verifyToken, isAdmin, async (req, res) => {
+    const {customerId} = req.params;
+    const { type, amount, note } = req.body;
 
     if (!type || !amount || !customerId) return res.status(400).json({ message: "All fields are required!" })
     if (!['credit', 'payment'].includes(type)) return res.status(400).json({ message: "Invalid entry type" })
@@ -61,6 +71,7 @@ entryRouter.get('/:customerId', verifyToken, isAdmin, async (req, res) => {
         res.status(500).json({ message: "Something went wrong!" })
     }
 })
+
 
 
 export default entryRouter;
