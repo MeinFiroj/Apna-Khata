@@ -74,7 +74,49 @@ entryRouter.get('/:customerId', verifyToken, isAdmin, async (req, res) => {
     }
 })
 
+entryRouter.patch('/:id/verify', verifyToken, isAdmin, async (req, res) => {
+    const { id } = req.params;
 
+    try {
+        const entry = await entryModel.findById(id)
+        if (!entry) return res.status(404).json({ message: "Entry not found" })
+        if (entry.status !== 'pending') return res.status(400).json({ message: `Entry already ${entry.status}, cannot be changed` })
+
+        entry.status = 'verified'
+        entry.verifiedAt = new Date()
+        entry.verifiedBy = req.user.id
+        await entry.save()
+
+        res.status(200).json({ message: "Entry verified", data : entry })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
+    }
+})
+
+entryRouter.patch('/:id/reject', verifyToken, isAdmin, async (req, res) => {
+    const { id } = req.params;
+    const { rejectionReason } = req.body
+
+    if (!rejectionReason) return res.status(400).json({ message: "Rejection reasong is required" })
+
+    try {
+        const entry = await entryModel.findById(id)
+        if (!entry) return res.status(404).json({ message: "Entry not found" })
+        if (entry.status !== 'pending') return res.status(400).json({ message: `Entry already ${entry.status}, cannot be changed` })
+
+        entry.status = 'rejected'
+        entry.rejectionReason = rejectionReason;
+        entry.verifiedAt = new Date()
+        entry.verifiedBy = req.user.id
+        await entry.save()
+
+        res.status(200).json({ message: "Entry rejected", data: entry })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
+    }
+})
 
 
 
