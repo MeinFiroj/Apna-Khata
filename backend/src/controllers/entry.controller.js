@@ -5,7 +5,7 @@ export const addEntry = async (req, res) => {
     const { customerId } = req.params;
     const { type, amount, note } = req.body;
 
-    if (!type || !amount || !customerId) return res.status(400).json({ message: "All fields are required!" })
+    if (!type || !amount) return res.status(400).json({ message: "Type and amount are required!" })
     if (!['credit', 'payment'].includes(type)) return res.status(400).json({ message: "Invalid entry type" })
     if (typeof amount !== 'number' || amount <= 0) return res.status(400).json({ message: "Invalid amount" })
 
@@ -53,7 +53,7 @@ export const getPendingEntries = async (req, res) => {
 
 export const getSingleCustEntries = async (req, res) => {
     const { customerId } = req.params;
-    if (!customerId) return res.status(400).json({ message: "Customer id not found" })
+    
     try {
         const customer = await userModel.findById(customerId)
         if (!customer) return res.status(404).json({ message: "Customer not found" })

@@ -1,9 +1,9 @@
 import express from 'express'
 import cors from 'cors'
-import adminRouter from './routes/admin.routes.js';
-import userRouter from './routes/user.routes.js';
+import adminRouter from './routes/admin.route.js';
+import userRouter from './routes/user.route.js';
 import cookieParser from 'cookie-parser'
-import entryRouter from './routes/entry.routes.js';
+import entryRouter from './routes/entry.route.js';
 
 const app = express()
 
