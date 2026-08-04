@@ -7,17 +7,9 @@ import { userModel } from '../models/user.model.js';
 
 const entryRouter = express.Router()
 
-// Entries management
-// - post /entries/:customerId
-// - get /entries
-// - get /entries/:cu
-// - get /entries/pending
-// - PATCH /entries/:id/verify
-// - PATCH /entries/:id/reject
-// - GET /dashboard
 
 entryRouter.post('/:customerId', verifyToken, isAdmin, async (req, res) => {
-    const {customerId} = req.params;
+    const { customerId } = req.params;
     const { type, amount, note } = req.body;
 
     if (!type || !amount || !customerId) return res.status(400).json({ message: "All fields are required!" })
@@ -49,10 +41,20 @@ entryRouter.get('/', verifyToken, isAdmin, async (req, res) => {
     try {
         const allEntries = await entryModel.find()
 
-        res.status(200).json({ message: "Entries fetched successfully!", allEntries })
+        res.status(200).json({ message: "Entries fetched successfully!", data: allEntries })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })
+    }
+})
+
+entryRouter.get('/pendings', verifyToken, isAdmin, async (req, res) => {
+    try {
+        const pendingEntries = await entryModel.find({ status: 'pending' })
+        res.status(200).json({ message: "Entries fetched successfully", data: pendingEntries })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
     }
 })
 
@@ -65,12 +67,16 @@ entryRouter.get('/:customerId', verifyToken, isAdmin, async (req, res) => {
 
         const entries = await entryModel.find({ customerId })
 
-        res.status(200).json({ message: "Entries fetched successfully!", entries })
+        res.status(200).json({ message: "Entries fetched successfully!", data: entries })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })
     }
 })
+
+
+
+
 
 
 
