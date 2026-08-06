@@ -19,7 +19,7 @@ app.use(cookieParser())
 // Routes
 app.use('/api/admin', adminRouter)
 app.use('/api/user', userRouter)
-app.use('/api/admin/entries', entryRouter)
+app.use('/api/entries', entryRouter)
 
 
 export default app;

@@ -1,5 +1,6 @@
 import { adminModel } from '../models/admin.model.js';
 import jwt from 'jsonwebtoken'
+import { userModel } from '../models/user.model.js';
 
 export const authMiddleware = async (req, res, next) => {
     const { email, password } = req.body;
@@ -38,4 +39,22 @@ export const isUser = (req, res, next) => {
     next();
 }
 
+export const checkActive = async (req, res, next) => {
+    const customerId = req.user.role === 'admin' ? req.params.customerId : req.user.id;
+    if (!customerId) return res.status(400).json({ message: "Customer ID required" })
 
+    try {
+        const customer = await userModel.findById(customerId)
+
+        if (!customer) return res.status(404).json({ message: "Customer not found" })
+
+        if (!customer.isActive) return res.status(403).json({ message: "This account is deactivated. Action not allowed" })
+
+        req.customer = customer;
+        next()
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
+    }
+}

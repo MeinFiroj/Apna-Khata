@@ -2,7 +2,7 @@ import { entryModel } from '../models/entry.model.js';
 import { userModel } from '../models/user.model.js';
 
 export const addEntry = async (req, res) => {
-    const { customerId } = req.params;
+    const user = req.user;
     const { type, amount, note } = req.body;
 
     if (!type || !amount) return res.status(400).json({ message: "Type and amount are required!" })
@@ -10,17 +10,17 @@ export const addEntry = async (req, res) => {
     if (typeof amount !== 'number' || amount <= 0) return res.status(400).json({ message: "Invalid amount" })
 
     try {
-        const customer = await userModel.findById(customerId)
-        if (!customer) return res.status(404).json({ message: "Customer not found" })
+        const isAdmin = req.user.role === 'admin';
+
         const entry = await entryModel.create({
-            customerId,
+            customerId: req.customer._id,
             type,
             amount,
-            addedBy: 'owner',
-            status: "verified",
             note,
-            verifiedAt: new Date(),
-            verifiedBy: req.user.id
+            addedBy: isAdmin ? 'owner' : 'customer',
+            status: isAdmin ? 'verified' : 'pending',
+            verifiedAt: isAdmin ? new Date() : null,
+            verifiedBy: isAdmin ? req.user.id : null
         })
 
         res.status(201).json({ message: "One Entry added!", data: entry })
@@ -53,7 +53,7 @@ export const getPendingEntries = async (req, res) => {
 
 export const getSingleCustEntries = async (req, res) => {
     const { customerId } = req.params;
-    
+
     try {
         const customer = await userModel.findById(customerId)
         if (!customer) return res.status(404).json({ message: "Customer not found" })
@@ -80,7 +80,7 @@ export const verifyEntry = async (req, res) => {
         entry.verifiedBy = req.user.id
         await entry.save()
 
-        res.status(200).json({ message: "Entry verified", data : entry })
+        res.status(200).json({ message: "Entry verified", data: entry })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong" })
