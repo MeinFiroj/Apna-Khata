@@ -55,10 +55,30 @@ export const getAllEntries = async (req, res) => {
     }
 }
 
+export const getRejectedEntries = async (req, res) => {
+    try {
+        const rejected = await entryModel.find({ status: 'rejected' })
+        res.status(200).json({ message: "All rejected entries", data: rejected })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
+    }
+}
+
+export const getVerifiedEntries = async (req, res) => {
+    try {
+        const verified = await entryModel.find({ status: 'verified' })
+        res.status(200).json({ message: "All verified entries", data: verified })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
+    }
+}
+
 export const getPendingEntries = async (req, res) => {
     try {
         const pendingEntries = await entryModel.find({ status: 'pending' })
-        res.status(200).json({ message: "Entries fetched successfully", data: pendingEntries })
+        res.status(200).json({ message: "All pending entries", data: pendingEntries })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong" })
