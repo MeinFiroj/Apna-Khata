@@ -52,7 +52,7 @@ export const getPendingEntries = async (req, res) => {
 }
 
 export const getSingleCustEntries = async (req, res) => {
-    const { customerId } = req.params;
+    const customerId = req.user.role === 'admin'? req.params.customerId : req.user.id;
 
     try {
         const customer = await userModel.findById(customerId)

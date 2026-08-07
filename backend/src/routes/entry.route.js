@@ -5,12 +5,13 @@ import { addEntry, getAllEntries, getPendingEntries, getSingleCustEntries, rejec
 const entryRouter = express.Router();
 
 entryRouter.post('/:customerId', verifyToken, isAdmin, checkActive, addEntry);
-entryRouter.get('/', verifyToken, isAdmin, getAllEntries);
+entryRouter.get('/all', verifyToken, isAdmin, getAllEntries);
 entryRouter.get('/pendings', verifyToken, isAdmin, getPendingEntries);
 entryRouter.get('/:customerId', verifyToken, isAdmin, getSingleCustEntries);
 entryRouter.patch('/:id/verify', verifyToken, isAdmin, checkActiveForEntry, verifyEntry);
 entryRouter.patch('/:id/reject', verifyToken, isAdmin, checkActiveForEntry, rejectEntry);
 
 entryRouter.post('/', verifyToken, isUser, checkActive, addEntry);
+entryRouter.get('/', verifyToken, isUser, getSingleCustEntries)
 
 export default entryRouter;
