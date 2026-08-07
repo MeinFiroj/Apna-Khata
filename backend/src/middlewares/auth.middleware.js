@@ -1,6 +1,7 @@
 import { adminModel } from '../models/admin.model.js';
 import jwt from 'jsonwebtoken'
 import { userModel } from '../models/user.model.js';
+import { entryModel } from '../models/entry.model.js';
 
 export const authMiddleware = async (req, res, next) => {
     const { email, password } = req.body;
@@ -53,6 +54,28 @@ export const checkActive = async (req, res, next) => {
         req.customer = customer;
         next()
 
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Something went wrong" })
+    }
+}
+
+
+export const checkActiveForEntry = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const entry = await entryModel.findById(id)
+        if (!entry) return res.status(404).json({ message: "Entry not found" })
+
+        const customer = await userModel.findById(entry.customerId);
+        if (!customer) return res.status(404).json({ message: "Customer not found" })
+        if (!customer.isActive) return res.status(403).json({ message: "This account is deactivated. Action not allowed" })
+
+        if (entry.status !== 'pending') return res.status(400).json({ message: `Entry already ${entry.status}, cannot be changed` })
+
+        req.entry = entry;
+        next()
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong" })

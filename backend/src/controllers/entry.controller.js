@@ -68,13 +68,9 @@ export const getSingleCustEntries = async (req, res) => {
 }
 
 export const verifyEntry = async (req, res) => {
-    const { id } = req.params;
+    const { entry } = req;
 
     try {
-        const entry = await entryModel.findById(id)
-        if (!entry) return res.status(404).json({ message: "Entry not found" })
-        if (entry.status !== 'pending') return res.status(400).json({ message: `Entry already ${entry.status}, cannot be changed` })
-
         entry.status = 'verified'
         entry.verifiedAt = new Date()
         entry.verifiedBy = req.user.id
@@ -88,16 +84,12 @@ export const verifyEntry = async (req, res) => {
 }
 
 export const rejectEntry = async (req, res) => {
-    const { id } = req.params;
     const { rejectionReason } = req.body
+    const { entry } = req;
 
     if (!rejectionReason) return res.status(400).json({ message: "Rejection reasong is required" })
 
     try {
-        const entry = await entryModel.findById(id)
-        if (!entry) return res.status(404).json({ message: "Entry not found" })
-        if (entry.status !== 'pending') return res.status(400).json({ message: `Entry already ${entry.status}, cannot be changed` })
-
         entry.status = 'rejected'
         entry.rejectionReason = rejectionReason;
         entry.verifiedAt = new Date()
