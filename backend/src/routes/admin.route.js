@@ -1,7 +1,8 @@
 import express from 'express'
-import { authMiddleware, isAdmin, verifyToken } from '../middlewares/auth.middleware.js';
+import { authMiddleware, isAdmin, setRole, verifyToken } from '../middlewares/auth.middleware.js';
 import { adminLoginCtrl, adminMeCtrl, adminRegCtrl } from '../controllers/adminAuth.controller.js';
 import { createUser, deActivateUser, getLedger, reActivateUser, searchUser } from '../controllers/user.controller.js';
+import { forgotPassword, resetPassword } from '../controllers/resetPass.controller.js';
 
 const adminRouter = express.Router();
 
@@ -9,6 +10,9 @@ const adminRouter = express.Router();
 adminRouter.post('/register', authMiddleware, adminRegCtrl)
 adminRouter.post('/login', authMiddleware, adminLoginCtrl)
 adminRouter.get("/me", adminMeCtrl)
+
+adminRouter.post('/forgot-password', setRole('admin'), forgotPassword)
+adminRouter.post('/reset-password/:token', setRole('admin'), resetPassword)
 
 // User Account management routes
 adminRouter.post('/create-user', verifyToken, isAdmin, createUser)

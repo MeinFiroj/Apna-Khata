@@ -57,3 +57,51 @@ export const sendLoginAlertEmail = async (toEmail, userName) => {
         html
     });
 };
+
+export const sendResetPasswordEmail = async (toEmail, userName, resetLink) => {
+    const html = `
+    <div style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f4f7; padding: 32px 0;">
+        <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+            
+            <div style="background-color: #4f46e5; padding: 20px 24px;">
+                <h1 style="color: #ffffff; font-size: 18px; margin: 0;">Apna Khata</h1>
+            </div>
+
+            <div style="padding: 28px 24px;">
+                <h2 style="font-size: 18px; color: #111827; margin: 0 0 12px;">Reset Your Password</h2>
+                <p style="font-size: 14px; color: #374151; line-height: 1.6; margin: 0 0 20px;">
+                    Hi ${userName}, we received a request to reset your password. Click the button below to set a new one.
+                </p>
+
+                <div style="text-align: center; margin: 24px 0;">
+                    <a href="${resetLink}" style="background-color: #4f46e5; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; display: inline-block;">
+                        Reset Password
+                    </a>
+                </div>
+
+                <p style="font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0 0 8px;">
+                    This link will expire in <b>15 minutes</b>.
+                </p>
+                <p style="font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0;">
+                    If you didn't request this, you can safely ignore this email — your password won't be changed.
+                </p>
+            </div>
+
+            <div style="background-color: #f9fafb; padding: 14px 24px; border-top: 1px solid #e5e7eb;">
+                <p style="font-size: 12px; color: #9ca3af; margin: 0;">
+                    This is an automated message from Apna Khata. Please do not reply to this email.
+                </p>
+            </div>
+
+        </div>
+    </div>
+    `;
+
+    await transporter.sendMail({
+        from: `Apna Khata <${process.env.GMAIL_USER}>`,
+        to: toEmail,
+        subject: 'Reset Your Password',
+        text: `Hi ${userName}, reset your password using this link: ${resetLink}. This link expires in 15 minutes. If you didn't request this, ignore this email.`,
+        html
+    });
+};

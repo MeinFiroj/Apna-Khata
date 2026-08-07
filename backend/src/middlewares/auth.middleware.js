@@ -60,7 +60,6 @@ export const checkActive = async (req, res, next) => {
     }
 }
 
-
 export const checkActiveForEntry = async (req, res, next) => {
     const { id } = req.params;
 
@@ -81,4 +80,9 @@ export const checkActiveForEntry = async (req, res, next) => {
         console.log(error)
         res.status(500).json({ message: "Something went wrong" })
     }
+}
+
+export const setRole = (role) => (req, res, next) => {
+    req.role = role;
+    next()
 }
