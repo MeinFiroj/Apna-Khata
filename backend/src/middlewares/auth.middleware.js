@@ -75,6 +75,7 @@ export const checkActiveForEntry = async (req, res, next) => {
         if (entry.status !== 'pending') return res.status(400).json({ message: `Entry already ${entry.status}, cannot be changed` })
 
         req.entry = entry;
+        req.customer = customer;
         next()
     } catch (error) {
         console.log(error)

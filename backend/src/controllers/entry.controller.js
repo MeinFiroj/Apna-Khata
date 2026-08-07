@@ -1,19 +1,28 @@
 import { entryModel } from '../models/entry.model.js';
 import { userModel } from '../models/user.model.js';
 
+const userTotalBalance = (entryAmount, type, totalBalance) => {
+    if (type === 'payment') return totalBalance -= entryAmount;
+    else return totalBalance += entryAmount;
+}
+
 export const addEntry = async (req, res) => {
-    const user = req.user;
+    const { user, customer } = req;
     const { type, amount, note } = req.body;
 
     if (!type || !amount) return res.status(400).json({ message: "Type and amount are required!" })
     if (!['credit', 'payment'].includes(type)) return res.status(400).json({ message: "Invalid entry type" })
     if (typeof amount !== 'number' || amount <= 0) return res.status(400).json({ message: "Invalid amount" })
 
+    if (type === 'payment' && amount > customer.totalBalance) {
+        return res.status(400).json({ message: `Payment amount exceeds outstanding balance (₹${customer.totalBalance})` })
+    }
+
     try {
         const isAdmin = req.user.role === 'admin';
 
         const entry = await entryModel.create({
-            customerId: req.customer._id,
+            customerId: customer._id,
             type,
             amount,
             note,
@@ -22,6 +31,11 @@ export const addEntry = async (req, res) => {
             verifiedAt: isAdmin ? new Date() : null,
             verifiedBy: isAdmin ? req.user.id : null
         })
+
+        if (entry.status === 'verified') {
+            customer.totalBalance = userTotalBalance(entry.amount, entry.type, customer.totalBalance);
+            await customer.save()
+        }
 
         res.status(201).json({ message: "One Entry added!", data: entry })
     } catch (error) {
@@ -52,7 +66,7 @@ export const getPendingEntries = async (req, res) => {
 }
 
 export const getSingleCustEntries = async (req, res) => {
-    const customerId = req.user.role === 'admin'? req.params.customerId : req.user.id;
+    const customerId = req.user.role === 'admin' ? req.params.customerId : req.user.id;
 
     try {
         const customer = await userModel.findById(customerId)
@@ -68,13 +82,18 @@ export const getSingleCustEntries = async (req, res) => {
 }
 
 export const verifyEntry = async (req, res) => {
-    const { entry } = req;
+    const { entry, customer } = req;
 
     try {
         entry.status = 'verified'
         entry.verifiedAt = new Date()
         entry.verifiedBy = req.user.id
         await entry.save()
+
+        if (entry.status === 'verified') {
+            customer.totalBalance = userTotalBalance(entry.amount, entry.type, customer.totalBalance);
+            await customer.save()
+        }
 
         res.status(200).json({ message: "Entry verified", data: entry })
     } catch (error) {
