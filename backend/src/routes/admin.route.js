@@ -1,6 +1,6 @@
 import express from 'express'
 import multer, { memoryStorage } from 'multer';
-import { authMiddleware, isAdmin, setRole, verifyToken } from '../middlewares/auth.middleware.js';
+import { isAdmin, setRole, validateAdminCred, verifyToken } from '../middlewares/auth.middleware.js';
 import { adminLoginCtrl, adminMeCtrl, adminRegCtrl } from '../controllers/adminAuth.controller.js';
 import { createUser, deActivateUser, getLedger, reActivateUser, searchUser } from '../controllers/user.controller.js';
 import { forgotPassword, resetPassword } from '../controllers/resetPass.controller.js';
@@ -10,9 +10,9 @@ const adminRouter = express.Router();
 const upload = multer({ storage: multer.memoryStorage() })
 
 // Auth routes
-adminRouter.post('/register', authMiddleware, adminRegCtrl)
-adminRouter.post('/login', authMiddleware, adminLoginCtrl)
-adminRouter.get("/me", adminMeCtrl)
+adminRouter.post('/register', validateAdminCred, adminRegCtrl)
+adminRouter.post('/login', validateAdminCred, adminLoginCtrl)
+adminRouter.get("/me", verifyToken, isAdmin, adminMeCtrl)
 
 adminRouter.post('/forgot-password', setRole('admin'), forgotPassword)
 adminRouter.post('/reset-password/:token', setRole('admin'), resetPassword)

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { userModel } from '../models/user.model.js';
 import { entryModel } from '../models/entry.model.js';
 
-export const authMiddleware = async (req, res, next) => {
+export const validateAdminCred = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) return res.status(400).json({ message: "Invalid email or password" })
