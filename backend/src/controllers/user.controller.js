@@ -1,5 +1,8 @@
 import { userModel } from '../models/user.model.js';
 import { entryModel } from '../models/entry.model.js';
+import validator from 'validator'
+import bcrypt from 'bcryptjs';
+import { uploadFile } from '../services/fileUpload.service.js';
 
 export const createUser = async (req, res) => {
     const { name, email, password, number } = req.body;
@@ -11,10 +14,14 @@ export const createUser = async (req, res) => {
         const userExistance = await userModel.findOne({ email })
         if (userExistance) return res.status(409).json({ message: "User already exist!" })
 
-        const passHash = await bcrypt.hash(password, 10);;
-        const user = await userModel.create({ name, email, password: passHash, number })
+        const imgRes = await uploadFile(req.file.buffer, req.file.originalname)
 
-        res.status(201).json({ message: "User registered successfully!", data: { name: user.name, email: user.email, number: user.number, id: user._id } })
+        const passHash = await bcrypt.hash(password, 10);
+        const user = await userModel.create({ name, email, password: passHash, number, image: imgRes.url })
+        const userObj = user.toObject()
+        delete userObj.password;
+
+        res.status(201).json({ message: "User registered successfully!", data: userObj })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })

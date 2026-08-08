@@ -3,6 +3,7 @@ import { userModel } from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendLoginAlertEmail } from '../services/email.service.js';
+import { uploadFile } from '../services/fileUpload.service.js';
 
 
 export const userEmailCheck = async (req, res) => {
@@ -24,6 +25,7 @@ export const userEmailCheck = async (req, res) => {
 
 export const userRegCtrl = async (req, res) => {
     const { name, email, password, number } = req.body;
+    const image = req.file;
 
     if (!name || !email || !password || !number) return res.status(400).json({ message: "All feilds are required!" })
     if (typeof email !== 'string' || !validator.isEmail(email) || !validator.isStrongPassword(password, { minLength: 6 })) return res.status(400).json({ message: 'Invalid email or password!' })
@@ -32,8 +34,12 @@ export const userRegCtrl = async (req, res) => {
         const userExistance = await userModel.findOne({ email })
         if (userExistance) return res.status(409).json({ message: "User already exist!" })
 
+        const imgRes = await uploadFile(image.buffer, image.originalname)
+
         const passHash = await bcrypt.hash(password, 10);;
-        const user = await userModel.create({ name, email, password: passHash, number })
+        const user = await userModel.create({ name, email, password: passHash, number, image: imgRes.url })
+        const userObj = user.toObject();
+        delete userObj.password;
 
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {
@@ -43,7 +49,7 @@ export const userRegCtrl = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        res.status(201).json({ message: "User registered successfully!", data: { name: user.name, email: user.email, number: user.number, id: user._id } })
+        res.status(201).json({ message: "User registered successfully!", data: userObj })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })
@@ -75,7 +81,10 @@ export const userLogCtrl = async (req, res) => {
 
         await sendLoginAlertEmail(email, userExistance.name)
 
-        res.status(200).json({ message: "User logged in successfully!", data: { name: userExistance.name, email: userExistance.email, number: userExistance.number, id: userExistance._id } })
+        const userObj = userExistance.toObject()
+        delete userObj.password;
+
+        res.status(200).json({ message: "User logged in successfully!", data: userObj })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })
