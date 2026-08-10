@@ -1,8 +1,11 @@
-import React from 'react'
+import MainRoutes from "./routes/MainRoutes"
+
 
 const App = () => {
   return (
-    <di>Admin app</di>
+    <div>
+      <MainRoutes/>
+    </div>
   )
 }
 

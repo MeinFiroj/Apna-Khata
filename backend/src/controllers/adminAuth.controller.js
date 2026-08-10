@@ -25,7 +25,10 @@ export const adminRegCtrl = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        res.status(201).json({ message: "Admin registered successfully", data: { email: admin.email, id: admin._id } })
+        const adminObj = admin.toObject()
+        delete adminObj.password;
+
+        res.status(201).json({ message: "Admin registered successfully", data: adminObj })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Server error!" })
@@ -51,7 +54,10 @@ export const adminLoginCtrl = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        res.status(200).json({ message: "Admin login successfully", data: { email: existingAdmin.email, id: existingAdmin._id } })
+        const adminObj = existingAdmin.toObject()
+        delete adminObj.password;
+
+        res.status(200).json({ message: "Admin login successfully", data: adminObj })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Server error!" })
@@ -59,12 +65,10 @@ export const adminLoginCtrl = async (req, res) => {
 }
 
 export const adminMeCtrl = async (req, res) => {
-    const { token } = req.cookies;
-    if (!token) return res.status(401).json({ message: "Unauthorized, Token not found" })
+    const { user } = req;
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-        const admin = await adminModel.findOne({ _id: decoded.id }).select('-password')
-        if(!admin) return res.status(404).json({message : "Admin not found"})
+        const admin = await adminModel.findOne({ _id: user.id }).select('-password')
+        if (!admin) return res.status(404).json({ message: "Admin not found" })
         res.status(200).json({ message: "Admin Data fetched Successfully!", data: admin })
     } catch (error) {
         console.log(error)
