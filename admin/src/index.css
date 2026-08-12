@@ -9,7 +9,7 @@
 
     --clr-text-primary: #0B1C30;
     --clr-text-secondary: #434653;
-    --clr-text-muted: #C3C6D5;
+    --clr-text-muted: #a6a9b7;
     --clr-text-light: #FFFFFF;
 
     --clr-success: #1B6D24;
@@ -20,6 +20,8 @@
     --clr-danger-light: #f39999;
 
     --clr-border: #C3C6D5;
+
+    --pad-phone : 12px;
 
     --font-body: "Work Sans", sans-serif;
 }

@@ -7,7 +7,7 @@ const Input = ({
   ...props
 }) => {
   const inputStyles = {
-    default: "border rounded-lg px-3 py-2 bg-(--clr-input-bg)",
+    default: ` py-2 ${inputIcon ? "" : "bg-(--clr-input-bg) border rounded-lg px-3"}`,
     large: "text-5xl py-4 text-center font-medium",
     oneLiner: "py-2",
   };
@@ -29,10 +29,10 @@ const Input = ({
         </label>
       )}
       <div
-        className={`flex items-center gap-2 relative ${inputStyle === "oneLiner" && "border-b-2"}`}
+        className={`flex items-center gap-2 relative ${inputStyle === "oneLiner" && "border-b-2"} ${inputIcon ? "bg-(--clr-input-bg) border rounded-lg px-3" : ""}`}
       >
         {inputIcon && (
-          <span className={inputStyle === "large" && "absolute"}>
+          <span className={inputStyle === "large" ? "absolute" : ""}>
             {inputIcon}
           </span>
         )}
