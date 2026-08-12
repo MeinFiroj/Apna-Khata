@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { register } from "../api/authApi";
+import { registerFunc } from "../api/authApi";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 
@@ -23,7 +23,7 @@ const Register = () => {
   // form onSubmit func
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const res = await register(formData);
+    const res = await registerFunc(formData);
 
     if (res.success) {
       setAdmin(res.data.data);

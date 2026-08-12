@@ -13,7 +13,7 @@ const AuthContext = ({ children }) => {
       if (res.success) setAdmin(res.data.data);
       setLoading(false)
     };
-
+    
     getAdminFunc();
   }, []);
 
