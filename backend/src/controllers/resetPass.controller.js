@@ -7,7 +7,7 @@ import { adminModel } from '../models/admin.model.js';
 
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
-    const Model = req.role === 'admin'? adminModel : userModel;
+    const Model = req.role === 'admin' ? adminModel : userModel;
 
     if (!email || !validator.isEmail(email)) return res.status(400).json({ message: "Valid email required" })
 
@@ -35,7 +35,7 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
-    const Model = req.role === 'admin'? adminModel : userModel;
+    const Model = req.role === 'admin' ? adminModel : userModel;
 
     if (!validator.isStrongPassword(password, { minLength: 6 })) return res.status(400).json({ message: "Invalid password" })
 
@@ -53,6 +53,12 @@ export const resetPassword = async (req, res) => {
         account.resetPasswordToken = undefined;
         account.resetPasswordExpires = undefined;
         await account.save();
+
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax'
+        });
 
         res.status(200).json({ message: "Password reset successful. Please log in." })
     } catch (error) {
