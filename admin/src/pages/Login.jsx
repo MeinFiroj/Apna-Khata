@@ -42,7 +42,7 @@ const Login = () => {
 
   return (
     <div className="px-(--pad-phone) py-10 flex flex-col items-center justify-center min-h-screen">
-      <div className="flex flex-col items-center max-w-100">
+      <div className="flex flex-col items-center max-w-90">
         <div
           data-logo="Apna-Khata-Logo"
           className="bg-(--clr-primary) w-fit p-2 rounded-xl shadow-2xl"
@@ -55,7 +55,7 @@ const Login = () => {
         <p className="">Secure Ledger for you Business</p>
       </div>
 
-      <div className="border rounded-xl px-5 py-10 mt-8 max-w-100">
+      <div className="border rounded-xl px-5 py-10 mt-8 max-w-90 w-full">
         <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
           <Input
             id="email"

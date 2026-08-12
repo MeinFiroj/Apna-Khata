@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "../pages/Login";
-import Register from "../pages/Register";
 import ForgotPass from "../pages/ForgotPass";
 import ResetPass from "../pages/ResetPass";
 import Dashboard from "../pages/Dashboard";
