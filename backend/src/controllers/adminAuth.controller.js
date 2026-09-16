@@ -82,5 +82,5 @@ export const adminLogoutCtrl = async (req, res) => {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax'
     });
-    res.status(200).json({ message: "Logged out successfully" });
+    res.status(200).json({ message: "Logged out" });
 }
