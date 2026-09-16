@@ -25,16 +25,17 @@ export const userEmailCheck = async (req, res) => {
 
 export const userRegCtrl = async (req, res) => {
     const { name, email, password, number } = req.body;
-    const image = req.file;
+    const file = req.file;
 
     if (!name || !email || !password || !number) return res.status(400).json({ message: "All feilds are required!" })
     if (typeof email !== 'string' || !validator.isEmail(email) || !validator.isStrongPassword(password, { minLength: 6 })) return res.status(400).json({ message: 'Invalid email or password!' })
+    if (!req.file) return res.status(400).json({ message: 'Profile image is required' })
 
     try {
         const userExistance = await userModel.findOne({ email })
         if (userExistance) return res.status(409).json({ message: "User already exist!" })
 
-        const imgRes = await uploadFile(image.buffer, image.originalname)
+        const imgRes = await uploadFile(file.buffer, file.originalname)
 
         const passHash = await bcrypt.hash(password, 10);;
         const user = await userModel.create({ name, email, password: passHash, number, image: imgRes.url })
@@ -79,12 +80,12 @@ export const userLogCtrl = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        await sendLoginAlertEmail(email, userExistance.name)
-
         const userObj = userExistance.toObject()
         delete userObj.password;
 
         res.status(200).json({ message: "User logged in successfully!", data: userObj })
+
+        await sendLoginAlertEmail(email, userExistance.name)
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })

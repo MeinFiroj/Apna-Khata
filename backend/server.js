@@ -7,11 +7,18 @@ config()
 const PORT = process.env.PORT;
 
 
-connectDb()
-app.listen(PORT, () => {
-    console.log("Server is running on port " + PORT)
-})
+const startServer = async () => {
+    await connectDb();
 
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+};
+
+startServer().catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+});
 
 
 

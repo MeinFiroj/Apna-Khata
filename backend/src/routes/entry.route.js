@@ -14,6 +14,6 @@ entryRouter.patch('/:id/verify', verifyToken, isAdmin, checkActiveForEntry, veri
 entryRouter.patch('/:id/reject', verifyToken, isAdmin, checkActiveForEntry, rejectEntry);
 
 entryRouter.post('/', verifyToken, isUser, checkActive, addEntry);
-entryRouter.get('/', verifyToken, isUser, getSingleCustEntries)
+entryRouter.get('/', verifyToken, isUser, getSingleCustEntries);
 
 export default entryRouter;
