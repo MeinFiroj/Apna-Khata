@@ -17,17 +17,21 @@ const ResetPass = () => {
   useEffect(() => {
     if (password !== confirmPass) setError("Password does not match");
     else setError(null);
-  }, [confirmPass]);
+  }, [confirmPass, password]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirmPass) {
+      setError("Password does not match");
+      return;
+    } else setError(null);
     setLoading(true);
     const res = await resetPassFunc(password, token);
     if (res.success) {
       toast.success(res.data.message || "Password changed successfully!");
+      navigate("/login");
     } else toast.error(res.message);
 
-    navigate("/login");
     setLoading(false);
     setPassword("");
     setConfirmPass("");

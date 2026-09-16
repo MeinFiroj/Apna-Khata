@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { loginFunc, registerFunc } from "../api/authApi";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useContext";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Wallet, User2, LockKeyhole, ArrowRight } from "lucide-react";
@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="px-(--pad-phone) py-10 flex flex-col items-center justify-center min-h-screen">
+    <div className="px-(--pad-phone) py-10 flex flex-col items-center justify-center min-h-screen w-full">
       <div className="flex flex-col items-center max-w-90">
         <div
           data-logo="Apna-Khata-Logo"
@@ -120,38 +120,3 @@ const Login = () => {
 };
 
 export default Login;
-
-{
-  /* <div>
-            <label className="flex items-center gap-1 mb-2 " htmlFor="email">
-              <User2 size={18} color="var(--clr-text-secondary)" />{" "}
-              <span>Email ID</span>
-            </label>
-            <input
-              id="email"
-              className="border rounded-lg w-full px-3 py-2 bg-(--clr-input-bg) outline-0"
-              value={formData.email}
-              onChange={handleChange}
-              type='email'
-              name="email"
-              required
-              placeholder="Enter your email-id"
-            />
-          </div>
-          <div>
-            <label className="flex items-center gap-1 mb-2 " htmlFor="password">
-              <LockKeyhole size={18} color="var(--clr-text-secondary)" />
-              <span>{pathname === "/register" && "Set"} Password</span>
-            </label>
-            <input
-              id="password"
-              className="border rounded-lg w-full px-3 py-2 bg-(--clr-input-bg) outline-0"
-              value={formData.password}
-              onChange={handleChange}
-              type="password"
-              name="password"
-              required
-              placeholder="******"
-            />
-          </div> */
-}
