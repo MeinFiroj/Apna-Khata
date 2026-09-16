@@ -2,7 +2,7 @@
 
 :root {
     --clr-bg: #FFFFFF;
-    --clr-surface: #BCCEFF;
+    --clr-surface: #DCE9FF;
     --clr-primary: #003C90;
     --clr-primary-hover: #0F52BA;
     --clr-input-bg: #EFF4FF;
@@ -12,16 +12,18 @@
     --clr-text-muted: #a6a9b7;
     --clr-text-light: #FFFFFF;
 
-    --clr-success: #1B6D24;
-    --clr-success-light: #A0F399;
-    --clr-pending: #FACC15;
-    --clr-pending-light: #f3ed99;
+    --clr-success: #0d9e1e;
+    --clr-success-light: #b2fdad;
+    --clr-pending: #e35b00;
+    --clr-pending-light: #f9df9f;
     --clr-danger: #EF4444;
-    --clr-danger-light: #f39999;
+    --clr-danger-light: #fbb4b4;
 
     --clr-border: #C3C6D5;
 
     --pad-phone : 12px;
+    --pad-desk : 24px;
+    --footer-space:65px;
 
     --font-body: "Work Sans", sans-serif;
 }
