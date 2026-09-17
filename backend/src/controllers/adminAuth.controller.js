@@ -20,8 +20,8 @@ export const adminRegCtrl = async (req, res) => {
         const token = jwt.sign({ id: admin._id, role: admin.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
@@ -49,8 +49,8 @@ export const adminLoginCtrl = async (req, res) => {
         const token = jwt.sign({ id: existingAdmin._id, role: existingAdmin.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            secure: true,
+            sameSite: "none",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
@@ -79,8 +79,8 @@ export const adminMeCtrl = async (req, res) => {
 export const adminLogoutCtrl = async (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
+        secure: true,
+        sameSite: 'none'
     });
     res.status(200).json({ message: "Logged out" });
 }
