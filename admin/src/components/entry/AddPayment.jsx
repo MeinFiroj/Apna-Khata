@@ -48,8 +48,11 @@ const AddPayment = ({ setIsActive, activeContent, selectedUser }) => {
     if (!amount) {
       setError("Amount is required");
       return;
+    }else if (amount < 1 || isNaN(amount)){
+      setError("Enter a valid amount")
+      return;
     }
-    if (!selectedCust) {
+    if (!selectedCust && !selectedUser) {
       setError("Select a customer");
       return;
     }
@@ -57,7 +60,7 @@ const AddPayment = ({ setIsActive, activeContent, selectedUser }) => {
       setError("Select a payment method");
       return;
     }
-    setError(null)
+    setError(null);
     const entryData = {
       type: activeContent === "payment" ? "payment" : "credit",
       amount: Number(amount),
@@ -65,7 +68,8 @@ const AddPayment = ({ setIsActive, activeContent, selectedUser }) => {
       paymentMethod,
     };
 
-    const res = await addEntry(selectedCust._id, entryData);
+    const id = selectedCust ? selectedCust._id : selectedUser._id;
+    const res = await addEntry(id, entryData);
 
     if (res.success) {
       toast.success("Payment received");
@@ -86,7 +90,7 @@ const AddPayment = ({ setIsActive, activeContent, selectedUser }) => {
         <h2 className="font-semibold text-lg mb-3 text-(--clr-text-primary)">
           {activeContent === "payment" ? "Add Payment" : "Add Credit"}
         </h2>
-        {error && <span className="text-red-500">{error}</span>}
+        
         <form
           onSubmit={onSubmitHandler}
           className="flex flex-col gap-(--pad-phone) md:gap-(--pad-desk)"
@@ -102,6 +106,7 @@ const AddPayment = ({ setIsActive, activeContent, selectedUser }) => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
+          {error && <span className="text-red-500">{error}</span>}
           {selectedUser ? (
             <div className="border rounded-xl p-3">
               <SelectedCust
