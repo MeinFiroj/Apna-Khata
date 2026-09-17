@@ -5,6 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import AuthContext from "./context/AuthContext.jsx";
 import UserContext from "./context/UserContext.jsx";
+import { registerSW } from "virtual:pwa-register";
+
+registerSW();
 
 createRoot(document.getElementById("root")).render(
   <AuthContext>

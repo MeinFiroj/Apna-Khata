@@ -62,10 +62,6 @@ const CustomerDetail = () => {
     getLedger();
   }, [params.id]);
 
-  useEffect(() => {
-    console.log(entries);
-  }, [entries]);
-
   // Update Payment Status
   useEffect(() => {
     let balance = user?.totalBalance || 0;
