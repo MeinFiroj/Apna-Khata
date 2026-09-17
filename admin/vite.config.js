@@ -7,12 +7,12 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [react(), tailwindcss(), VitePWA({
     manifest: {
-      name: "Apna Khata",
-      short_name: "Apna Khata",
-      theme_color: "#ffffff",
+      name: "Apna Khata Admin",
+      short_name: "Apna Khata Admin",
+      theme_color: "#0F52BA",
       description: "Apna Bhaji Shop presents Apna Khata.",
       start_url: '.',
-      display : 'standalone',
+      display: 'standalone',
       icons: [
         {
           "src": "icons/icon-48x48.webp",
@@ -64,8 +64,8 @@ export default defineConfig({
           "sizes": "512x512",
           "type": "image/webp"
         }
-      ]
+      ],
     },
-    registerType : "autoUpdate"
+    registerType: "autoUpdate"
   })],
 })
