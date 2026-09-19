@@ -4,24 +4,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendLoginAlertEmail } from '../services/email.service.js';
 import { uploadFile } from '../services/fileUpload.service.js';
+import { entryModel } from '../models/entry.model.js';
 
-
-export const userEmailCheck = async (req, res) => {
-    const { email } = req.body;
-
-    if (!email) return res.status(400).json({ message: "Email is required!" });
-
-    if (typeof email !== 'string' || !validator.isEmail(email)) return res.status(400).json({ message: "Invalid email!" })
-
-    try {
-        const userExistance = await userModel.findOne({ email });
-        if (userExistance) return res.status(409).json({ message: "User already exist!" })
-
-        res.status(200).json({ message: "Email verified successfully!" })
-    } catch (error) {
-        res.status(500).json({ message: "Something went wrong" })
-    }
-}
 
 export const userRegCtrl = async (req, res) => {
     const { name, email, password, number } = req.body;
@@ -34,6 +18,8 @@ export const userRegCtrl = async (req, res) => {
     try {
         const userExistance = await userModel.findOne({ email })
         if (userExistance) return res.status(409).json({ message: "User already exist!" })
+        const numberExist = await userModel.findOne({ number })
+        if (numberExist) return res.status(409).json({ message: "Phone number is already in use!" })
 
         const imgRes = await uploadFile(file.buffer, file.originalname)
 
@@ -72,6 +58,8 @@ export const userLogCtrl = async (req, res) => {
         const checkPass = await bcrypt.compare(password, userExistance.password);
         if (!checkPass) return res.status(401).json({ message: "Incorrect password" })
 
+        const entries = await entryModel.find({ customerId: userExistance._id }).sort({ createdAt: -1 }).limit(8)
+
         const token = jwt.sign({ id: userExistance._id, role: userExistance.role }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" })
         res.cookie("token", token, {
             httpOnly: true,
@@ -80,10 +68,10 @@ export const userLogCtrl = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
-        const userObj = userExistance.toObject()
-        delete userObj.password;
+        const user = userExistance.toObject()
+        delete user.password;
 
-        res.status(200).json({ message: "User logged in successfully!", data: userObj })
+        res.status(200).json({ message: "User logged in successfully!", data: { user, entries } })
 
         await sendLoginAlertEmail(email, userExistance.name)
     } catch (error) {
@@ -100,7 +88,10 @@ export const userMeCtrl = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
         const user = await userModel.findOne({ _id: decoded.id }).select('-password')
         if (!user) return res.status(404).json({ message: "User not found" })
-        res.status(200).json({ message: "User Data fetched Successfully!", data: user })
+
+        const entries = await entryModel.find({ customerId: user._id }).sort({ createdAt: -1 }).limit(8)
+
+        res.status(200).json({ message: "User Data fetched Successfully!", data: { user, entries } })
     } catch (error) {
         console.log(error)
         res.status(401).json({ message: "Invalid or expired token" })
