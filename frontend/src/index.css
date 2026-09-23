@@ -2,6 +2,7 @@
 
 :root {
     --clr-bg: #FFFFFF;
+    --clr-bg-off : #FAF8FF;
     --clr-surface: #DCE9FF;
     --clr-primary: #003C90;
     --clr-primary-hover: #0F52BA;
@@ -38,5 +39,9 @@ body {
 }
 
 .upper-shadow{
+    box-shadow: -1px 0px 25px rgba(0,0,0,0.1);
+}
+
+.down-shadow{
     box-shadow: 1px 0px 25px rgba(0,0,0,0.1);
 }

@@ -93,7 +93,7 @@ const Login = () => {
         </h1>
       </div>
       <form
-        className="flex flex-col items-start gap-4 bg-(--clr-bg) px-5 py-8 rounded-2xl w-full max-w-90 mt-7 down-shadow md:mt-0 md:rounded-none md:max-w-110"
+        className="flex flex-col items-start gap-4 border bg-(--clr-bg) px-5 py-8 rounded-2xl w-full max-w-90 mt-7 down-shadow md:mt-0 md:rounded-none md:max-w-110"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         {isLogin && (
@@ -185,7 +185,7 @@ const Login = () => {
           </span>
           <MoveRight size={22} />
         </button>
-        
+
         {isLogin ? (
           <p className="text-sm">
             <span>Don't have an account?</span>
