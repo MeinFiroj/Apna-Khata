@@ -22,10 +22,12 @@ export const forgotPassword = async (req, res) => {
         account.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 min
         await account.save();
 
-        const resetLink = `${process.env.FRONTEND_URL}/${req.role}/reset-password/${rawToken}`;
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password/${rawToken}`;
         await sendResetPasswordEmail(account.email, account.name || 'Admin', resetLink); // similar to your login alert email
 
-        res.status(200).json({ message: "If this email exists, a reset link has been sent" })
+        res.status(200).json({
+            message: `We've sent a password reset link to ${email}.`
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong" })
