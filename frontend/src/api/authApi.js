@@ -26,3 +26,21 @@ export const activeUser = async() =>{
         return {success : false, message : error.response?.data?.message || "Something went wrong"}
     }
 }
+
+export const forgotPass = async(email) =>{
+    try {
+        const res = await axios.post('/api/user/forgot-password', {email})
+        return {success : true, data : res.data}
+    } catch (error) {
+        return {success : false, message : error.response?.data?.message || "Something went wrong"}
+    }
+}
+
+export const resetPass = async (password, token) =>{
+    try {
+        const res = await axios.post(`/api/user/reset-password/${token}`, {password})
+        return {success : true, data : res.data}
+    } catch (error) {
+        return {success : false, message : error.response?.data?.message || "Something went wrong"}
+    }
+}
