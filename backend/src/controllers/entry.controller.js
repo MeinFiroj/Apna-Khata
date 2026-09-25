@@ -122,7 +122,7 @@ export const getSingleCustEntries = async (req, res) => {
         const customer = await userModel.findById(customerId)
         if (!customer) return res.status(404).json({ message: "Customer not found" })
 
-        const entries = await entryModel.find({ customerId })
+        const entries = await entryModel.find({ customerId }).sort({createdAt : -1})
 
         res.status(200).json({ message: "Entries fetched successfully!", data: entries })
     } catch (error) {

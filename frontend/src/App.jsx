@@ -4,9 +4,10 @@ import MainRoutes from "./routes/MainRoutes";
 import AuthRoutes from "./routes/AuthRoutes";
 import { useAuth } from "./context/auth/useAuth";
 import { BeatLoader } from "react-spinners";
+import FadeInContainer from "./components/shared/FadeInContainer";
 
 const App = () => {
-  const { userData, setUserData, isUserLoading } = useAuth();
+  const { userData, isUserLoading } = useAuth();
 
   if(isUserLoading) return <div className="h-screen w-screen flex items-center justify-center bg-black/40">
     <BeatLoader color="var(--clr-primary)" />
@@ -17,6 +18,7 @@ const App = () => {
       {userData ? (
         <>
           <Header />
+          <FadeInContainer/>
           <MainRoutes />
           <Footer />
         </>
