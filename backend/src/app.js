@@ -8,12 +8,12 @@ import entryRouter from './routes/entry.route.js';
 const app = express()
 
 // Middlewares
-app.use(express.json());
 app.use(cors({
     origin : [process.env.FRONTEND_URL, process.env.FRONTEND_URL_ADMIN , 'http://localhost:5173'],
     credentials : true
 }))
 app.use(cookieParser())
+app.use(express.json());
 
 
 // Routes
