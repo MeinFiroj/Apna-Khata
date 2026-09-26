@@ -1,11 +1,11 @@
 import { IndianRupee } from "lucide-react";
 
-const InrAmount = ({ iconStroke, iconStyle, amount, amountStyle }) => {
+const InrAmount = ({ iconStroke, iconStyle, amount, amountStyle, parentStyle }) => {
   const addCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   return (
-    <p className="flex items-start">
+    <p className={`flex items-start ${parentStyle}`}>
       <IndianRupee className={iconStyle} strokeWidth={iconStroke || 2} />
       <span className={amountStyle}>{addCommas(amount || 0)}</span>
     </p>
