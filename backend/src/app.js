@@ -9,7 +9,7 @@ const app = express()
 
 // Middlewares
 app.use(cors({
-    origin : ["https://apnakhataa.vercel.app", process.env.FRONTEND_URL_ADMIN , 'http://localhost:5173'],
+    origin : [process.env.FRONTEND_URL, process.env.FRONTEND_URL_ADMIN , 'http://localhost:5173'],
     credentials : true
 }))
 app.use(cookieParser())
