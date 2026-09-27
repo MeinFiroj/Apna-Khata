@@ -48,7 +48,7 @@ const AddEntry = () => {
         ),
         { duration: 10000 },
       );
-      setEntries((prev) => [...prev, { ...res.data?.data }]);
+      setEntries((prev) => [{ ...res.data?.data }, ...prev]);
       setFadeInActive(null);
       setAmount("");
       setNote("");
