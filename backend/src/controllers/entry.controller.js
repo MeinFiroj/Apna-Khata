@@ -117,14 +117,20 @@ export const getPendingEntries = async (req, res) => {
 
 export const getSingleCustEntries = async (req, res) => {
     const customerId = req.user.role === 'admin' ? req.params.customerId : req.user.id;
+    const limit = parseInt(req.query.limit) || 6
+    const page = parseInt(req.query.page) || 1
+    const skip = (page - 1) * limit
 
     try {
         const customer = await userModel.findById(customerId)
         if (!customer) return res.status(404).json({ message: "Customer not found" })
 
-        const entries = await entryModel.find({ customerId }).sort({createdAt : -1})
+        const entries = await entryModel.find({ customerId }).sort({createdAt : -1}).skip(skip).limit(limit)
+        const totalEntries = await entryModel.countDocuments({customerId})
+        const totalPages = Math.ceil(totalEntries/limit)
 
-        res.status(200).json({ message: "Entries fetched successfully!", data: entries })
+
+        res.status(200).json({ message: "Entries fetched successfully!", data: entries, pagination : {totalEntries, totalPages } })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Something went wrong!" })

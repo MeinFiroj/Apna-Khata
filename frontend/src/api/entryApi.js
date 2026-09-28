@@ -9,9 +9,9 @@ export const addEntry = async (data) => {
     }
 }
 
-export const getEntries = async () => {
+export const getEntries = async ({limit, page}) => {
     try {
-        const res = await axios.get('/api/entries/')
+        const res = await axios.get(`/api/entries/?page=${page}&limit=${limit}`)
         return { success: true, data: res.data }
     } catch (error) {
         return { success: false, message: error.response?.data?.message || "Something went wrong" }
