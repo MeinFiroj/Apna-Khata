@@ -1,7 +1,6 @@
 import { MapPin, Plus, Store, UserRoundCheck, X } from "lucide-react";
 import { useAuth } from "../../context/auth/useAuth.js";
 import { useEntries } from "../../context/entry/useEntries.js";
-import { format, isToday, isValid, isYesterday } from "date-fns";
 import InrAmount from "../shared/InrAmount.jsx";
 import { useUI } from "../../context/ui/useUI.js";
 import { formatRawDate } from "../../utils/formatDate.js";
@@ -53,7 +52,7 @@ const Hero = () => {
         <div className="flex items-center gap-2 w-full">
           <InrAmount
             amount={userData.totalBalance}
-            amountStyle="text-(--clr-text-light) font-bold text-4xl leading-7 md:text-5xl md:leading-11"
+            amountStyle="text-(--clr-text-light) font-bold text-4xl leading-7 md:text-5xl md:leading-10"
             iconStyle="text-(--clr-text-light) w-5 h-5 md:w-6 md:h-6"
           />
           <span className="uppercase font-medium text-sm tracking-wider">
@@ -62,7 +61,7 @@ const Hero = () => {
         </div>
         <button
           onClick={() => setFadeInActive("AddEntry")}
-          className="flex items-center gap-1 bg-(--clr-primary) text-(--clr-text-light) rounded-full py-2 px-3 cursor-pointer fixed bottom-18 right-3 md:mt-3 md:bg-(--clr-bg) md:text-(--clr-primary) md:hover:bg-white/90 transition-all md:rounded-lg md:relative md:bottom-0 md:right-0"
+          className="flex items-center gap-1 bg-(--clr-primary) text-(--clr-text-light) rounded-full py-2 px-3 cursor-pointer fixed bottom-18 right-3 z-10 md:mt-3 md:bg-(--clr-bg) md:text-(--clr-primary) md:hover:bg-white/90 transition-all md:rounded-lg md:relative md:bottom-0 md:right-0"
         >
           <Plus size={20} className="md:stroke-3" />{" "}
           <span className="md:font-semibold">Add Entry</span>

@@ -9,16 +9,19 @@ import FadeInContainer from "./components/shared/FadeInContainer";
 const App = () => {
   const { userData, isUserLoading } = useAuth();
 
-  if(isUserLoading) return <div className="h-screen w-screen flex items-center justify-center bg-black/40">
-    <BeatLoader color="var(--clr-primary)" />
-  </div>
+  if (isUserLoading)
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-black/40">
+        <BeatLoader color="var(--clr-primary)" />
+      </div>
+    );
 
   return (
-    <div className="min-h-screen w-screen flex flex-col items-start ">
+    <div className="min-h-screen w-full flex flex-col items-start">
       {userData ? (
         <>
           <Header />
-          <FadeInContainer/>
+          <FadeInContainer />
           <MainRoutes />
           <Footer />
         </>
