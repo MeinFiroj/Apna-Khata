@@ -5,9 +5,19 @@ import AuthRoutes from "./routes/AuthRoutes";
 import { useAuth } from "./context/auth/useAuth";
 import { BeatLoader } from "react-spinners";
 import FadeInContainer from "./components/shared/FadeInContainer";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const App = () => {
   const { userData, isUserLoading } = useAuth();
+  const {pathname} = useLocation()
+
+  useEffect(()=> {
+    window.scrollTo({
+      top:0,
+      behavior : 'smooth'
+    })
+  }, [pathname])
 
   if (isUserLoading)
     return (
