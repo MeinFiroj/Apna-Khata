@@ -1,7 +1,20 @@
 import { Bell, User, Wallet } from "lucide-react";
 import Navbar from "../shared/Navbar";
+import { toast } from "react-hot-toast";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Header = () => {
+  const { pathname } = useLocation();
+  const [pageTitle, setPageTitle] = useState("Dashboard");
+
+  useEffect(() => {
+    if (pathname === "/") setPageTitle("Dashboard");
+    else if (pathname === "/my-passbook") setPageTitle("My Passbook");
+    else if (pathname === "/support") setPageTitle("Support");
+    else setPageTitle("Profile");
+  }, [pathname]);
+
   return (
     <header className="p-(--pad-phone) flex items-center justify-between w-full md:px-(--pad-desk) sticky top-0 bg-(--clr-bg-off) down-shadow z-50">
       <div className="flex items-center gap-2">
@@ -11,7 +24,7 @@ const Header = () => {
         <div>
           <h2 className="text-sm">Apna Khata</h2>
           <h1 className="font-semibold text-(--clr-text-primary) text-xl leading-5">
-            Dashboard
+            {pageTitle}
           </h1>
         </div>
       </div>
@@ -19,12 +32,15 @@ const Header = () => {
         <Navbar />
       </nav>
       <div className="flex items-center gap-3 md:gap-5">
-        <button>
+        <button onClick={() => toast("Hey, there is no notification for you")}>
           <Bell size={22} />
         </button>
-        <button className="bg-(--clr-primary) rounded-full aspect-square p-2">
+        <Link
+          to="/my-profile"
+          className="bg-(--clr-primary) rounded-full aspect-square p-2"
+        >
           <User size={18} color="var(--clr-text-light)" />
-        </button>
+        </Link>
       </div>
     </header>
   );
