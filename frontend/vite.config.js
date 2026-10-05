@@ -11,15 +11,15 @@ export default defineConfig({
       globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
     },
     manifest: {
-      "name": "Apna Khata",
-      "short_name": "Apna Khata",
-      "description": "Digital credit ledger for small shop owners",
-      "theme_color": "#003C90",
-      "background_color": "#17153B",
-      "display": "standalone",
-      "start_url": '/',
-      "scope": "/",
-      "icons": [
+      name: "Apna Khata",
+      short_name: "Khata",
+      description: "Digital credit ledger for small shop owners",
+      theme_color: "#0F52BA",
+      background_color: "#FAF8FF",
+      display: "standalone",
+      start_url: '/',
+      scope: "/",
+      icons: [
         {
           "src": "icons/icon-48x48.png",
           "sizes": "48x48",
@@ -71,12 +71,13 @@ export default defineConfig({
           "type": "image/png"
         },
         {
-          src: "icons/icon-512x512-maskable.png",
-          sizes: "512x512",
-          type: "image/png",
-          purpose: "maskable"
+          'src': "icons/icon-512x512-maskable.png",
+          'sizes': "512x512",
+          'type': "image/png",
+          'purpose': "maskable"
         }
       ],
-    }
+    },
+    devOptions : {enabled : true}
   })],
 })
