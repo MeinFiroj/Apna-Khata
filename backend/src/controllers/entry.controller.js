@@ -74,7 +74,7 @@ export const getAllEntries = async (req, res) => {
     }
 
     try {
-        const entries = await entryModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit)
+        const entries = await entryModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean()
 
         const totalEntries = await entryModel.countDocuments(filter)
 

@@ -1,9 +1,11 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { getEntries } from "../../api/entryApi";
+import { useAuth } from "../../context/auth/useAuth";
 
 export const EntryContext = createContext(null);
 
 const EntryContextProvider = ({ children }) => {
+  const { isUserLoading, userData } = useAuth();
   const [entries, setEntries] = useState([]);
   const [entryLoading, setEntryLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -11,6 +13,7 @@ const EntryContextProvider = ({ children }) => {
   const limit = 8;
 
   const getMyEntries = async () => {
+    if (entryLoading || !userData) return;
     try {
       setEntryLoading(true);
       const res = await getEntries({ limit, page });
@@ -33,8 +36,10 @@ const EntryContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getMyEntries();
-  }, []);
+    if (!isUserLoading && userData) {
+      getMyEntries();
+    }
+  }, [isUserLoading, userData]);
 
   const value = useMemo(
     () => ({ entries, setEntries, entryLoading, hasMore, loadMore }),
