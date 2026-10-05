@@ -1,9 +1,21 @@
 import { format } from "date-fns";
 import FullPageLoader from "../components/shared/FullPageLoader";
 import { useAuth } from "../context/auth/useAuth";
+import { logoutUser } from "../api/authApi";
+import toast from "react-hot-toast";
 
 const Profile = () => {
-  const { userData, isUserLoading } = useAuth();
+  const { userData,setUserData, isUserLoading } = useAuth();
+
+  const handleLogoutUser = async() =>{
+    try {
+      const res = await logoutUser()
+      setUserData(null)
+      toast.success(res.data.message)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   
   return (
     <main className="w-full relative">
@@ -41,7 +53,7 @@ const Profile = () => {
               {format(new Date(userData.createdAt), "MMM, yyyy")}
             </p>
           </div>
-          <button className="font-medium w-full bg-gray-200 text-(--clr-primary) text-sm rounded px-6 pt-2 pb-1 uppercase mt-10 md:py-2 md:w-fit ">
+          <button onClick={()=> handleLogoutUser()} className="font-medium w-full cursor-pointer bg-gray-200 text-(--clr-primary) text-sm rounded px-6 pt-2 pb-1 uppercase mt-10 md:py-2 md:w-fit ">
             Logout
           </button>
         </div>

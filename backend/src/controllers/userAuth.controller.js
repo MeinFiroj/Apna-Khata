@@ -97,3 +97,12 @@ export const userMeCtrl = async (req, res) => {
         res.status(401).json({ message: "Invalid or expired token" })
     }
 }
+
+export const userLogoutCtrl = async (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none'
+    });
+    res.status(200).json({ message: "Logged out" });
+}

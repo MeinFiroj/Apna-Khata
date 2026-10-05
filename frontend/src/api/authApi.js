@@ -18,6 +18,15 @@ export const loginUser = async(data) =>{
     }
 }
 
+export const logoutUser = async() =>{
+    try {
+        const res = await axios.post('/api/user/logout')
+        return {success : true, data : res.data}
+    } catch (error) {
+        return {success : false, message : error.response?.data?.message || "Something went wrong"}
+    }
+}
+
 export const activeUser = async() =>{
     try {
         const res = await axios.get('/api/user/me')
