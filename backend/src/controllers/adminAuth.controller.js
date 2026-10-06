@@ -6,8 +6,12 @@ import { userModel } from '../models/user.model.js';
 
 
 export const adminRegCtrl = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, secretKey } = req.body;
     const { existingAdmin } = req;
+
+    if (secretKey !== process.env.ADMIN_REGISTER_SECRET) {
+        return res.status(403).json({ message: "Unauthorized" });
+    }
 
     if (!validator.isStrongPassword(password, { minLength: 6 }) || !validator.isEmail(email)) return res.status(400).json({ message: "Invalid email or password" })
 
