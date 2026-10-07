@@ -62,4 +62,4 @@ Admin adds payment         →  Reduces customer's balance
 
 ## Author
 **Firoj Shaikh** · Full Stack Developer (MERN) · Pune, India
-[LinkedIn](www.linkedin.com/in/ifirojshaikh) · [Email](mailto:firoj2108@gmail.com)
+[LinkedIn](https://www.linkedin.com/in/ifirojshaikh) · [Email](mailto:firoj2108@gmail.com)
